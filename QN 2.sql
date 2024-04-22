@@ -1,68 +1,46 @@
 -- Drop the table if it exists
-DROP TABLE IF EXISTS employees, departments;
+DROP TABLE IF EXISTS employees;
 
 -- Create the employees table
-CREATE TABLE employees(
+CREATE TABLE employees (
     id INT PRIMARY KEY,
     name VARCHAR(255),
-    salary DECIMAL(10,2),
-    department_id INT,
-    hire_date DATE
+    age INT,
+    address VARCHAR(255)
 );
 
--- Create the departments table
-CREATE TABLE departments(
-    id INT PRIMARY KEY,
-    name VARCHAR(255)
-);
+-- Insert data into the employees table
+INSERT INTO employees (id, name, age, address)
+VALUES
+    (1001, 'Rohan', 26, 'Delhi'),
+    (1002, 'Ankit', 30, 'Gurgaon'),
+    (1003, 'Gaurav', 27, 'Mumbai'),
+    (1004, 'Raja', 32, 'Nagpur');
 
--- Insert values into the departments table
-INSERT INTO departments (id, name) VALUES
-(1, 'Engineering'),
-(2, 'Sales'),
-(3, 'Marketing'),
-(4, 'HR');
+SELECT * FROM employees;
 
+SELECT * FROM employees WHERE id = 1004;
+SELECT * FROM employees;
 
+SELECT * FROM employees WHERE name LIKE 'R%';
 
--- Insert values into the employees table
-INSERT INTO employees (id, name, salary, department_id, hire_date) VALUES
-(1, 'Alic', 60000.00, 1, '2020-01-01'),
-(2, 'Bob', 70000.00, 1, '2020-01-15'),
-(3, 'Charlie', 80000.00, 2, '2020-02-01'),
-(4, 'Dave', 90000.00, 3, '2020-02-15'),
-(5, 'Eve', 100000.00, 4, '2020-03-01');
-
-SELECT employees.id, employees.name AS employee_name, employees.salary, departments.name AS department_name
+SELECT id, age, name
 FROM employees
-INNER JOIN departments ON employees.department_id = departments.id;
-SELECT e.department_id, d.name AS department_name, e.id AS employee_id, e.name AS employee_name, e.salary
-FROM employees e
-INNER JOIN departments d ON e.department_id = d.id
-INNER JOIN (
-    SELECT department_id, MAX(salary) AS max_salary
-    FROM employees
-    GROUP BY department_id
-) max_salaries ON e.department_id = max_salaries.department_id AND e.salary = max_salaries.max_salary;
+ORDER BY age DESC;
+
+SELECT id, age, name
+FROM employees
+ORDER BY  age ASC;
+
+SELECT DISTINCT address FROM employees;
 
 
-SELECT e.department_id, d.name AS department_name, e.id AS employee_id, e.name AS employee_name, e.hire_date
-FROM employees e
-INNER JOIN departments d ON e.department_id = d.id
-INNER JOIN (
-    SELECT department_id, MIN(hire_date) AS oldest_hire_date
-    FROM employees
-    GROUP BY department_id
-) oldest_hire_dates ON e.department_id = oldest_hire_dates.department_id AND e.hire_date = oldest_hire_dates.oldest_hire_date;
 
-SELECT e.name AS employee_name, e.salary
-FROM employees e
-INNER JOIN (
-    SELECT department_id, AVG(salary) AS avg_salary
-    FROM employees
-    GROUP BY department_id
-) dept_avg_salary ON e.department_id = dept_avg_salary.department_id
-WHERE e.salary > dept_avg_salary.avg_salary;
+
+
+
+
+
 
 
 
